@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, Route, Routes, useParams } from "react-router-dom";
-import MovieCast from "./components/MovieCast";
-import MovieReviews from "./components/MovieReviews";
+import MovieCast from "../components/MovieCast";
+import MovieReviews from "../components/MovieReviews";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
