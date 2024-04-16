@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { Link, Route, Routes, useParams } from "react-router-dom";
+import MovieCast from "./components/MovieCast";
+import MovieReviews from "./components/MovieReviews";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
+  const [showCast, setShowCast] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -41,8 +45,29 @@ const MovieDetailsPage = () => {
       )}
       <p>Release Date: {movieDetails.release_date}</p>
       <p>Rating: {movieDetails.vote_average}</p>
-      <NavLink to={`/movies/${movieId}/reviews`}>Movie Reviews</NavLink>
-      <NavLink to={`/movies/${movieId}/cast`}>Movie Cast</NavLink>
+
+      <div>
+        <ul>
+          <li>
+            <Link to="cast" onClick={() => setShowCast(!showCast)}>
+              Movie Cast
+            </Link>
+            {showCast && <MovieCast movieId={movieId} />}
+            <Routes>
+              <Route path="cast" element={MovieCast} />
+            </Routes>
+          </li>
+          <li>
+            <Link to="reviews" onClick={() => setShowReviews(!showReviews)}>
+              Movie Reviews
+            </Link>
+            {showReviews && <MovieReviews movieId={movieId} />}
+            <Routes>
+              <Route path="reviews" element={MovieReviews} />
+            </Routes>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
