@@ -1,7 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 
-const MovieReviews = ({ movieId }) => {
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+const MovieReviews = () => {
+  const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {

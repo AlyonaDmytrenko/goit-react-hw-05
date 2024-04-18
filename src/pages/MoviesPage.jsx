@@ -1,42 +1,67 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import MovieList from "../components/MovieList";
 
 const MoviesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const query = searchParams.get("query");
+    setSearchQuery(query || "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    const searchMovies = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (searchQuery.trim() !== "") {
+          const response = await axios.get(
+            `https://api.themoviedb.org/3/search/movie?api_key=0e220c29e2525dd299266f92651edd95&query=${searchQuery}`
+          );
+          setSearchResults(response.data.results);
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    searchMovies();
+  }, [searchQuery]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const searchMovies = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=0e220c29e2525dd299266f92651edd95&query=${searchQuery}`
-      );
-      setSearchResults(response.data.results);
-    } catch (error) {
-      console.error("Error searching movies:", error);
-    }
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    setSearchParams({ query: searchQuery });
   };
 
   return (
     <div>
       <h2>Search Movies</h2>
-      <input
-        type="text"
-        placeholder="Search for a movie..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      <button onClick={searchMovies}>Search</button>
+      <form onSubmit={handleSearchSubmit}>
+        <input
+          type="text"
+          placeholder="Search for a movie..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <button type="submit">Search</button>
+      </form>
 
-      <h3>Search Results:</h3>
-      <ul>
-        {searchResults.map((movie) => (
-          <li key={movie.id}>{movie.title}</li>
-        ))}
-      </ul>
+      {loading && <div>Loading...</div>}
+      {error && <div>Error: {error.message}</div>}
+      {!loading && !error && <MovieList movies={searchResults} />}
     </div>
   );
 };

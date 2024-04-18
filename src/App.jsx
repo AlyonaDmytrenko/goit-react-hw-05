@@ -1,43 +1,30 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  NavLink,
-  Routes,
-} from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import MoviesPage from "./pages/MoviesPage";
-import MovieDetailsPage from "./pages/MovieDetailsPage";
-import MovieCast from "./components/MovieCast";
-import MovieReviews from "./components/MovieReviews";
-import NotFoundPage from "./pages/NotFoundPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Suspense, lazy } from "react";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const MoviesPage = lazy(() => import("./pages/MoviesPage"));
+const MovieDetailsPage = lazy(() => import("./pages/MovieDetailsPage"));
+const MovieCast = lazy(() => import("./components/MovieCast"));
+const MovieReviews = lazy(() => import("./components/MovieReviews"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const Navigation = lazy(() => import("./components/Navigation"));
 
 const App = () => {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/movies">Movies</NavLink>
-            </li>
-          </ul>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/movies" element={<MoviesPage />}></Route>
-          <Route path="/movie/:movieId/*" element={<MovieDetailsPage />} />
-          <Route path="/movies/:movieId/cast" element={<MovieCast />}></Route>
-          <Route
-            path="/movies/:movieId/reviews"
-            element={<MovieReviews />}
-          ></Route>
-          <Route path="*" element={<NotFoundPage />} />{" "}
-        </Routes>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div>
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movie/:movieId/*" element={<MovieDetailsPage />} />
+            <Route path="/movies/:movieId/cast" element={<MovieCast />} />
+            <Route path="/movies/:movieId/reviews" element={<MovieReviews />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
+      </Suspense>
     </Router>
   );
 };
