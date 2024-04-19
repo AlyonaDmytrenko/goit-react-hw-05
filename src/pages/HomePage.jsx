@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import MovieList from "../components/MovieList";
 
 const HomePage = () => {
   const [popularMovies, setPopularMovies] = useState([]);
@@ -29,13 +29,7 @@ const HomePage = () => {
   return (
     <div>
       <h1>Trending today</h1>
-      <ul>
-        {popularMovies.map((movie) => (
-          <li key={movie.id}>
-            <NavLink to={`/movie/${movie.id}`}>{movie.title}</NavLink>
-          </li>
-        ))}
-      </ul>
+      <MovieList movies={popularMovies} />
     </div>
   );
 };

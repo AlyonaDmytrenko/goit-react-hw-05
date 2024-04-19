@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link, Route, Routes, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, Route, Routes, useParams, useLocation } from "react-router-dom";
 import MovieCast from "../components/MovieCast";
 import MovieReviews from "../components/MovieReviews";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
+  const location = useLocation();
+  const movieDetailsRef = useRef(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [showCast, setShowCast] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
@@ -23,13 +25,14 @@ const MovieDetailsPage = () => {
           }
         );
         setMovieDetails(response.data);
+        movieDetailsRef.current = location.pathname;
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
 
     fetchMovieDetails();
-  }, [movieId]);
+  }, [movieId, location]);
 
   if (!movieDetails) return <div>Loading...</div>;
 
@@ -49,25 +52,38 @@ const MovieDetailsPage = () => {
       <div>
         <ul>
           <li>
-            <Link to="cast" onClick={() => setShowCast(!showCast)}>
+            <Link
+              to={`${movieDetailsRef.current}/cast`}
+              onClick={() => setShowCast(!showCast)}
+            >
               Movie Cast
             </Link>
             {showCast && <MovieCast movieId={movieId} />}
             <Routes>
-              <Route path="cast" element={MovieCast} />
+              <Route
+                path={`${movieDetailsRef.current}/cast`}
+                element={MovieCast}
+              />
             </Routes>
           </li>
           <li>
-            <Link to="reviews" onClick={() => setShowReviews(!showReviews)}>
+            <Link
+              to={`${movieDetailsRef.current}/reviews`}
+              onClick={() => setShowReviews(!showReviews)}
+            >
               Movie Reviews
             </Link>
             {showReviews && <MovieReviews movieId={movieId} />}
             <Routes>
-              <Route path="reviews" element={MovieReviews} />
+              <Route
+                path={`${movieDetailsRef.current}/reviews`}
+                element={MovieReviews}
+              />
             </Routes>
           </li>
         </ul>
       </div>
+      <button onClick={() => window.history.back()}>Go Back</button>
     </div>
   );
 };

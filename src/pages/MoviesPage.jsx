@@ -23,7 +23,11 @@ const MoviesPage = () => {
 
         if (searchQuery.trim() !== "") {
           const response = await axios.get(
-            `https://api.themoviedb.org/3/search/movie?api_key=0e220c29e2525dd299266f92651edd95&query=${searchQuery}`
+            `https://api.themoviedb.org/3/search/movie?api_key=0e220c29e2525dd299266f92651edd95&query=${searchQuery}`,
+            {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZTIyMGMyOWUyNTI1ZGQyOTkyNjZmOTI2NTFlZGQ5NSIsInN1YiI6IjY2MTkwYTkzZWE4NGM3MDE3ZDU2ZTY1MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3okoPuK6bYT8Nbg1Ko3rb-FRfyEXI4Ajm4IsK3RZzow",
+            }
           );
           setSearchResults(response.data.results);
         }
