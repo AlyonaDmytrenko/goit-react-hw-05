@@ -1,6 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, Route, Routes, useParams, useLocation } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useParams,
+  useLocation,
+  Outlet,
+} from "react-router-dom";
 import MovieCast from "../components/MovieCast";
 import MovieReviews from "../components/MovieReviews";
 
@@ -25,7 +32,7 @@ const MovieDetailsPage = () => {
           }
         );
         setMovieDetails(response.data);
-        movieDetailsRef.current = location.pathname;
+        movieDetailsRef.current = location.state?.from.pathname || "/";
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
@@ -48,7 +55,6 @@ const MovieDetailsPage = () => {
       )}
       <p>Release Date: {movieDetails.release_date}</p>
       <p>Rating: {movieDetails.vote_average}</p>
-
       <div>
         <ul>
           <li>
@@ -62,7 +68,7 @@ const MovieDetailsPage = () => {
             <Routes>
               <Route
                 path={`${movieDetailsRef.current}/cast`}
-                element={MovieCast}
+                element={<MovieCast />}
               />
             </Routes>
           </li>
@@ -77,13 +83,14 @@ const MovieDetailsPage = () => {
             <Routes>
               <Route
                 path={`${movieDetailsRef.current}/reviews`}
-                element={MovieReviews}
+                element={<MovieReviews />}
               />
             </Routes>
           </li>
         </ul>
       </div>
       <button onClick={() => window.history.back()}>Go Back</button>
+      <Outlet />
     </div>
   );
 };
