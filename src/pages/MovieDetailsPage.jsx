@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Link,
+  NavLink,
   Route,
   Routes,
   useParams,
@@ -14,7 +14,6 @@ import MovieReviews from "../components/MovieReviews";
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
-  const movieDetailsRef = useRef(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [showCast, setShowCast] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
@@ -32,14 +31,13 @@ const MovieDetailsPage = () => {
           }
         );
         setMovieDetails(response.data);
-        movieDetailsRef.current = location.state?.from.pathname || "/";
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
 
     fetchMovieDetails();
-  }, [movieId, location]);
+  }, [movieId]);
 
   if (!movieDetails) return <div>Loading...</div>;
 
@@ -58,31 +56,30 @@ const MovieDetailsPage = () => {
       <div>
         <ul>
           <li>
-            <Link
-              to={`${movieDetailsRef.current}/cast`}
+            <NavLink
+              to={`/movie/${movieId}/cast`}
               onClick={() => setShowCast(!showCast)}
+              activeClassName="active"
             >
               Movie Cast
-            </Link>
+            </NavLink>
             {showCast && <MovieCast movieId={movieId} />}
             <Routes>
-              <Route
-                path={`${movieDetailsRef.current}/cast`}
-                element={<MovieCast />}
-              />
+              <Route path={`/movie/:movieId/cast`} element={<MovieCast />} />
             </Routes>
           </li>
           <li>
-            <Link
-              to={`${movieDetailsRef.current}/reviews`}
+            <NavLink
+              to={`/movie/${movieId}/reviews`}
               onClick={() => setShowReviews(!showReviews)}
+              activeClassName="active"
             >
               Movie Reviews
-            </Link>
+            </NavLink>
             {showReviews && <MovieReviews movieId={movieId} />}
             <Routes>
               <Route
-                path={`${movieDetailsRef.current}/reviews`}
+                path={`/movie/:movieId/reviews`}
                 element={<MovieReviews />}
               />
             </Routes>
