@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   NavLink,
   Route,
@@ -14,6 +14,7 @@ import MovieReviews from "../components/MovieReviews";
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
+  const movieDetailsRef = useRef(location.state?.from.pathname || "/");
   const [movieDetails, setMovieDetails] = useState(null);
   const [showCast, setShowCast] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
@@ -57,7 +58,7 @@ const MovieDetailsPage = () => {
         <ul>
           <li>
             <NavLink
-              to={`/movie/${movieId}/cast`}
+              to={`${movieDetailsRef.current}/cast`}
               onClick={() => setShowCast(!showCast)}
               activeClassName="active"
             >
@@ -65,12 +66,15 @@ const MovieDetailsPage = () => {
             </NavLink>
             {showCast && <MovieCast movieId={movieId} />}
             <Routes>
-              <Route path={`/movie/:movieId/cast`} element={<MovieCast />} />
+              <Route
+                path={`${movieDetailsRef.current}/cast`}
+                element={<MovieCast />}
+              />
             </Routes>
           </li>
           <li>
             <NavLink
-              to={`/movie/${movieId}/reviews`}
+              to={`${movieDetailsRef.current}/reviews`}
               onClick={() => setShowReviews(!showReviews)}
               activeClassName="active"
             >
@@ -79,7 +83,7 @@ const MovieDetailsPage = () => {
             {showReviews && <MovieReviews movieId={movieId} />}
             <Routes>
               <Route
-                path={`/movie/:movieId/reviews`}
+                path={`${movieDetailsRef.current}/reviews`}
                 element={<MovieReviews />}
               />
             </Routes>
