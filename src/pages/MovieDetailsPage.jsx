@@ -60,7 +60,6 @@ const MovieDetailsPage = () => {
             <NavLink
               to={`${movieDetailsRef.current}/cast`}
               onClick={() => setShowCast(!showCast)}
-              activeClassName="active"
             >
               Movie Cast
             </NavLink>
@@ -76,7 +75,6 @@ const MovieDetailsPage = () => {
             <NavLink
               to={`${movieDetailsRef.current}/reviews`}
               onClick={() => setShowReviews(!showReviews)}
-              activeClassName="active"
             >
               Movie Reviews
             </NavLink>
@@ -90,8 +88,8 @@ const MovieDetailsPage = () => {
           </li>
         </ul>
       </div>
+
       <button onClick={() => window.history.back()}>Go Back</button>
-      <Outlet />
     </div>
   );
 };

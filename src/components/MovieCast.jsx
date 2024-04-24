@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link, NavLink, useParams } from "react-router-dom";
 
-const MovieCast = ({ movieId }) => {
+const MovieCast = () => {
+  const { movieId } = useParams();
   const [cast, setCast] = useState([]);
 
   useEffect(() => {
@@ -22,10 +24,13 @@ const MovieCast = ({ movieId }) => {
 
   return (
     <div>
+      <h3>Movie Cast</h3>
       <ul>
-        {cast.map((actor) => (
-          <li key={actor.id}>{actor.name}</li>
-        ))}
+        <NavLink>
+          {cast.map((actor) => (
+            <li key={actor.id}>{actor.name}</li>
+          ))}
+        </NavLink>
       </ul>
     </div>
   );
