@@ -24,6 +24,7 @@ const MovieCast = () => {
 
   return (
     <div>
+      <h3>Movie Cast</h3>
       <ul>
         {cast.map((actor) => (
           <li key={actor.id}>{actor.name}</li>

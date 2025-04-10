@@ -61,7 +61,7 @@ const MovieDetailsPage = () => {
               to={`${movieDetailsRef.current}/cast`}
               onClick={() => setShowCast(!showCast)}
             >
-              Movie Cast
+              Cast
             </NavLink>
             {showCast && <MovieCast movieId={movieId} />}
             <Routes>
@@ -76,7 +76,7 @@ const MovieDetailsPage = () => {
               to={`${movieDetailsRef.current}/reviews`}
               onClick={() => setShowReviews(!showReviews)}
             >
-              Movie Reviews
+              Reviews
             </NavLink>
             {showReviews && <MovieReviews movieId={movieId} />}
             <Routes>
@@ -87,6 +87,7 @@ const MovieDetailsPage = () => {
             </Routes>
           </li>
         </ul>
+        <Outlet />
       </div>
 
       <button onClick={() => window.history.back()}>Go Back</button>
