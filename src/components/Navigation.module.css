@@ -1,0 +1,17 @@
+.nav {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  gap: 20px;
+  gap: 20px;
+}
+.navLink {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+}
+
+.active {
+  background-color: rgb(45, 184, 17);
+  color: #000;
+}
