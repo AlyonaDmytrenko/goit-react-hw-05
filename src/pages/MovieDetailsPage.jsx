@@ -1,23 +1,20 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import {
-  NavLink,
-  Route,
-  Routes,
   useParams,
   useLocation,
+  NavLink,
+  Link,
   Outlet,
 } from "react-router-dom";
-import MovieCast from "../components/MovieCast";
-import MovieReviews from "../components/MovieReviews";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
-  const movieDetailsRef = useRef(location.state?.from.pathname || "/");
+
+  const backLinkRef = useRef(location.state?.from || "/");
+
   const [movieDetails, setMovieDetails] = useState(null);
-  const [showCast, setShowCast] = useState(false);
-  const [showReviews, setShowReviews] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -44,6 +41,8 @@ const MovieDetailsPage = () => {
 
   return (
     <div>
+      <Link to={backLinkRef.current}>Go back</Link>
+
       <h2>{movieDetails.title}</h2>
       <p>{movieDetails.overview}</p>
       {movieDetails.poster_path && (
@@ -54,43 +53,20 @@ const MovieDetailsPage = () => {
       )}
       <p>Release Date: {movieDetails.release_date}</p>
       <p>Rating: {movieDetails.vote_average}</p>
-      <div>
+
+      <hr />
+      <nav>
         <ul>
           <li>
-            <NavLink
-              to={`${movieDetailsRef.current}/cast`}
-              onClick={() => setShowCast(!showCast)}
-            >
-              Cast
-            </NavLink>
-            {showCast && <MovieCast movieId={movieId} />}
-            <Routes>
-              <Route
-                path={`${movieDetailsRef.current}/cast`}
-                element={<MovieCast />}
-              />
-            </Routes>
+            <NavLink to="cast">Cast</NavLink>
           </li>
           <li>
-            <NavLink
-              to={`${movieDetailsRef.current}/reviews`}
-              onClick={() => setShowReviews(!showReviews)}
-            >
-              Reviews
-            </NavLink>
-            {showReviews && <MovieReviews movieId={movieId} />}
-            <Routes>
-              <Route
-                path={`${movieDetailsRef.current}/reviews`}
-                element={<MovieReviews />}
-              />
-            </Routes>
+            <NavLink to="reviews">Reviews</NavLink>
           </li>
         </ul>
-        <Outlet />
-      </div>
+      </nav>
 
-      <button onClick={() => window.history.back()}>Go Back</button>
+      <Outlet />
     </div>
   );
 };
